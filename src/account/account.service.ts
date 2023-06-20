@@ -49,7 +49,15 @@ export class AccountService {
   }
 
   async findAll() {
-    const accounts = await this.prisma.account.findMany({});
+    const accounts = await this.prisma.account.findMany({
+      include: {
+        addedBy: {
+          select: {
+            firstName: true,
+          },
+        },
+      },
+    });
     const count = await this.prisma.account.count();
     return { success: true, count, accounts };
   }
@@ -58,6 +66,13 @@ export class AccountService {
     const account = await this.prisma.account.findUnique({
       where: {
         id,
+      },
+      include: {
+        addedBy: {
+          select: {
+            firstName: true,
+          },
+        },
       },
     });
 
