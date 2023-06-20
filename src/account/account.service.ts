@@ -48,12 +48,24 @@ export class AccountService {
     return { success: true, message: 'Account created', account };
   }
 
-  findAll() {
-    return `This action returns all account`;
+  async findAll() {
+    const accounts = await this.prisma.user.findMany();
+    return accounts;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} account`;
+  async findOne(id: string) {
+    const account = await this.prisma.account.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!account) {
+      throw new NotFoundException('there is no account with this id');
+    }
+
+    // return the accound
+    return { success: true, account };
   }
 
   async update(id: string, updateAccountDto: UpdateAccountDto) {
