@@ -12,6 +12,7 @@ import { jwtConstant } from './utils/constant';
     JwtModule.register({
       global: true,
       secret: jwtConstant.secret,
+      signOptions: { expiresIn: '1d' },
     }),
     ConfigModule.forRoot(),
   ],
