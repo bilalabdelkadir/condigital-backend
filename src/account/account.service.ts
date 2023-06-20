@@ -49,8 +49,9 @@ export class AccountService {
   }
 
   async findAll() {
-    const accounts = await this.prisma.user.findMany();
-    return accounts;
+    const accounts = await this.prisma.account.findMany({});
+    const count = await this.prisma.account.count();
+    return { success: true, count, accounts };
   }
 
   async findOne(id: string) {
@@ -96,7 +97,28 @@ export class AccountService {
     };
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} account`;
+  async remove(id: string) {
+    // check if the data exist
+    const accountExist = await this.prisma.account.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!accountExist) {
+      throw new NotFoundException('there is no account with this id');
+    }
+
+    const deletedAccount = await this.prisma.account.delete({
+      where: {
+        id,
+      },
+    });
+
+    if (!deletedAccount) {
+      throw new BadRequestException('Error happened while deleting');
+    }
+
+    return { success: true, message: 'account deleted successfully' };
   }
 }
