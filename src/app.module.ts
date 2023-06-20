@@ -4,6 +4,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { jwtConstant } from './utils/constant';
+import { AccountModule } from './account/account.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { jwtConstant } from './utils/constant';
       signOptions: { expiresIn: '1d' },
     }),
     ConfigModule.forRoot(),
+    AccountModule,
   ],
 })
 export class AppModule {}
