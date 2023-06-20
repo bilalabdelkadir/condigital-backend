@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -51,8 +56,32 @@ export class AccountService {
     return `This action returns a #${id} account`;
   }
 
-  update(id: string, updateAccountDto: UpdateAccountDto) {
+  async update(id: string, updateAccountDto: UpdateAccountDto) {
     // check if the data exist
+    const accountExist = await this.prisma.account.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!accountExist) {
+      throw new NotFoundException('there is no account with this id');
+    }
+
+    const updatedAccount = await this.prisma.account.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updateAccountDto,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Account updated succesfully',
+      updatedAccount,
+    };
   }
 
   remove(id: string) {
