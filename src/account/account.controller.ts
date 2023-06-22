@@ -30,25 +30,21 @@ export class AccountController {
     return await this.accountService.create(createAccountDto, userId);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.accountService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.accountService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
     return this.accountService.update(id, updateAccountDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.accountService.remove(id);

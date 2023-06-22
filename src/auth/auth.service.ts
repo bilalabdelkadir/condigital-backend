@@ -78,9 +78,7 @@ export class AuthService {
       );
     }
 
-    res.cookie('token', token, {
-      httpOnly: true,
-    });
+    res.cookie('token', token);
 
     // sign jwt token and return to the user
 
